@@ -19,6 +19,7 @@ struct _trie {
   size_t* first;
   SortedList *trans;
   unsigned *finite;
+  bool *truefinite;
   size_t *fallback;
 };
 
@@ -54,6 +55,9 @@ Trie newTrie() {
   result->fallback = calloc(INIT_CAPACITY, sizeof(size_t));
   FAIL_IF(result->fallback == NULL, "trie->fallback : malloc failed");
 
+  result->truefinite = calloc(INIT_CAPACITY, sizeof(bool));
+  FAIL_IF(result->truefinite == NULL, "trie->truefinite : malloc failed");
+
   return result;
 }
 
@@ -70,6 +74,7 @@ void freeTrie(Trie* trie) {
   free((*trie)->first);
   free((*trie)->finite);
   free((*trie)->fallback);
+  free((*trie)->truefinite);
   free(*trie);
   *trie = NULL;
 
@@ -173,8 +178,10 @@ void insertAll(Trie t, unsigned char** words, const size_t nb) {
           fprintf(stderr, "\tfinite node added at node %4zu\n", lins[i]);
         #endif
 
-        if (lins[i] != 0)
-          t->finite[lins[i]] = 1;
+        if (lins[i] != 0 && !t->truefinite[lins[i]]) {
+          t->finite[lins[i]]++;
+          t->truefinite[lins[i]] = true;
+        }
         ended[i] = true;
         rem--;
       }
@@ -330,5 +337,11 @@ void doubleCapacity(Trie t) {
   FAIL_IF(t->fallback == NULL, "realloc failure");
   for (size_t k = oldCapacity; k < t->max; ++k) {
     t->fallback[k] = 0;
+  }
+
+  t->truefinite = realloc(t->truefinite, t->max * 2 * sizeof(*(t->truefinite)));
+  FAIL_IF(t->truefinite == NULL, "realloc failure");
+  for (size_t k = oldCapacity; k < t->max; ++k) {
+    t->truefinite[k] = 0;
   }
 }

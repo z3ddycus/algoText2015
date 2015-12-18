@@ -47,8 +47,8 @@ function ac_run {
 }
 
 #rm -f log.csv
-#make
-#make clean
+make
+make clean
 gen
 ac_run
 exit
