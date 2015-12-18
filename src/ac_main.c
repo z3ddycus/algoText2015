@@ -27,8 +27,8 @@ int main(int argc, char** argv) {
 
   Words words = newWords();
   int continu = 1;
+  char* w = NULL;
   while (continu) {
-    char* w = NULL;
     size_t len = 0;
     ssize_t nbread;
     if ((nbread = getline(&w, &len, wordFile)) > 0) {
@@ -38,6 +38,7 @@ int main(int argc, char** argv) {
       continu = 0;
     }
   }
+  free(w);
 
   // timer begin
   struct timeval start, end;
@@ -59,6 +60,8 @@ int main(int argc, char** argv) {
 
   printf("[%s] - count : %zu (time : %zums)\n", argv[0], count, time);
   deleteWords(&words);
+  fclose(fText);
+  fclose(wordFile);
 
   return EXIT_SUCCESS;
 }
