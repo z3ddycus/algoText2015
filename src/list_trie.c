@@ -61,7 +61,7 @@ Trie newTrie() {
 void freeTrie(Trie* trie) {
   FAIL_IF(trie == NULL, "trie is null");
 
-  for(size_t i = 0; i < (*trie)->next - 1; i++) {
+  for(size_t i = 0; i < (*trie)->next; i++) {
     if ((*trie)->trans[i] != NULL) {
       freeList(&((*trie)->trans[i]));
     }
