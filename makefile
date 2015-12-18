@@ -1,5 +1,5 @@
 CC       = gcc
-CFLAGS   = -Wall -pedantic -g -std=c11 -O2 -ffunction-sections -fdata-sections -D_XOPEN_SOURCE=700
+CFLAGS   = -Wall -pedantic -std=c11 -O2 -ffunction-sections -fdata-sections -D_XOPEN_SOURCE=700
 
 LFLAGS   = -Wl,--gc-sections
 
